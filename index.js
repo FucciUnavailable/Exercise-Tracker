@@ -27,6 +27,8 @@ mongoose.connect(uri, {
   console.error('Error connecting to MongoDB', error);
 });
 
+
+//function to clear the mongoose database I call just for testing
 const db = mongoose.connection;
 let clearDocuments = () =>{
 db.once('open', async () => {
@@ -57,15 +59,16 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
-
+//testing response
 app.get("/whoami", (req,res)=>{
   let ip = req.ip
   res.send({"Hello friend, this is your ip": ip})
 })
 
 
+//create new user
 app.route("/api/users").post(async(req,res)=>{
-    let data= req.body
+    let data= req.body //get {username : "username } from the form
   try{
       let newUser = new User(data)
       await newUser.save()
@@ -87,6 +90,7 @@ app.route("/api/users").post(async(req,res)=>{
   }
 })
 
+//adding exercises 
 app.route("/api/users/:_id/exercises").post(async(req,res)=>{
     //get user ID and form info from request
     let userId = req.params._id
@@ -134,7 +138,7 @@ app.route("/api/users/:_id/exercises").post(async(req,res)=>{
 })
 
 
-
+//get entire data of each user including how many exercises they've added
 app.get("/api/users/:_id/logs", async (req, res) => {
   const userId = req.params._id;
   const { from, to, limit } = req.query;
